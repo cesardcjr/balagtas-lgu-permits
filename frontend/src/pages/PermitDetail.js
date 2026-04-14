@@ -83,7 +83,7 @@ export default function PermitDetail() {
     if (!admin) return toast.error("Admin contact not found");
     setSending(true);
     try {
-      await axios.post("/api/messages", {
+      await axios.post(`${process.env.REACT_APP_API_URL}/api/messages`, {
         recipientId: admin._id,
         subject: msgForm.subject,
         body: msgForm.body,
