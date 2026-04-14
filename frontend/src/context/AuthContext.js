@@ -22,7 +22,10 @@ export const AuthProvider = ({ children }) => {
   }, [token]);
 
   const login = async (email, password) => {
-    const res = await axios.post("/api/auth/login", { email, password });
+    const res = await axios.post(
+      `${process.env.REACT_APP_API_URL}/api/auth/login`,
+      { email, password },
+    );
     localStorage.setItem("token", res.data.token);
     axios.defaults.headers.common["Authorization"] = `Bearer ${res.data.token}`;
     setToken(res.data.token);
@@ -31,7 +34,10 @@ export const AuthProvider = ({ children }) => {
   };
 
   const register = async (data) => {
-    const res = await axios.post("/api/auth/register", data);
+    const res = await axios.post(
+      `${process.env.REACT_APP_API_URL}/api/auth/register`,
+      data,
+    );
     localStorage.setItem("token", res.data.token);
     axios.defaults.headers.common["Authorization"] = `Bearer ${res.data.token}`;
     setToken(res.data.token);
