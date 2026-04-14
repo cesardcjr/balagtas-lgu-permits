@@ -18,7 +18,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build"
   },
-  "proxy": " https://balagtas-lgu-permits.onrender.com",
+  "proxy": "http://localhost:5000",
   "browserslist": {
     "production": [
       ">0.2%",
