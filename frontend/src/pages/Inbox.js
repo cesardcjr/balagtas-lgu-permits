@@ -44,7 +44,10 @@ export default function Inbox() {
 
   const loadList = () => {
     setLoadingList(true);
-    const ep = tab === "inbox" ? "/api/messages/inbox" : "/api/messages/sent";
+    const ep =
+      tab === "inbox"
+        ? `${process.env.REACT_APP_API_URL}/api/messages/inbox`
+        : `${process.env.REACT_APP_API_URL}/api/messages/sent`;
     axios
       .get(ep)
       .then((r) => setMessages(r.data))
@@ -72,7 +75,9 @@ export default function Inbox() {
       // Mark thread as read
       if (tab === "inbox") {
         await axios
-          .patch(`/api/messages/thread/${msg.threadId}/read`)
+          .patch(
+            `${process.env.REACT_APP_API_URL}/api/messages/thread/${msg.threadId}/read`,
+          )
           .catch(() => {});
         setMessages((prev) =>
           prev.map((m) =>
@@ -81,7 +86,9 @@ export default function Inbox() {
         );
       }
       // Load full thread
-      const res = await axios.get(`/api/messages/thread/${msg.threadId}`);
+      const res = await axios.get(
+        `${process.env.REACT_APP_API_URL}/api/messages/thread/${msg.threadId}`,
+      );
       setThread(res.data);
     } catch {
       setThread([msg]);
@@ -95,11 +102,14 @@ export default function Inbox() {
     if (!admin) return toast.error("Admin not found");
     setSending(true);
     try {
-      const res = await axios.post("/api/messages", {
-        recipientId: admin._id,
-        subject: msgForm.subject,
-        body: msgForm.body,
-      });
+      const res = await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/messages`,
+        {
+          recipientId: admin._id,
+          subject: msgForm.subject,
+          body: msgForm.body,
+        },
+      );
       toast.success("Message sent!");
       setShowCompose(false);
       setMsgForm({ subject: "", body: "" });
@@ -117,7 +127,7 @@ export default function Inbox() {
     try {
       const recipientId =
         tab === "inbox" ? selected.sender?._id : selected.recipient?._id;
-      await axios.post("/api/messages", {
+      await axios.post(`${process.env.REACT_APP_API_URL}/api/messages`, {
         recipientId,
         subject: selected.subject.startsWith("Re:")
           ? selected.subject
@@ -129,7 +139,9 @@ export default function Inbox() {
       toast.success("Reply sent!");
       setReplyBody("");
       // Reload thread
-      const res = await axios.get(`/api/messages/thread/${selected.threadId}`);
+      const res = await axios.get(
+        `${process.env.REACT_APP_API_URL}/api/messages/thread/${selected.threadId}`,
+      );
       setThread(res.data);
       loadList();
     } catch {

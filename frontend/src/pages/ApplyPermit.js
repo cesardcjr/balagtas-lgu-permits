@@ -184,9 +184,13 @@ export default function ApplyPermit() {
       const fd = new FormData();
       fd.append("permitData", JSON.stringify(form));
       files.forEach((f) => fd.append("attachments", f));
-      const res = await axios.post("/api/permits", fd, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      const res = await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/permits`,
+        fd,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        },
+      );
       toast.success(
         `Application submitted! Transaction #: ${res.data.transactionNumber}`,
       );

@@ -42,7 +42,10 @@ export default function AdminInbox() {
 
   const loadList = () => {
     setLoadingList(true);
-    const ep = tab === "inbox" ? "/api/messages/inbox" : "/api/messages/sent";
+    const ep =
+      tab === "inbox"
+        ? `${process.env.REACT_APP_API_URL}/api/messages/inbox`
+        : `${process.env.REACT_APP_API_URL}/api/messages/sent`;
     axios
       .get(ep)
       .then((r) => setMessages(r.data))
@@ -63,7 +66,9 @@ export default function AdminInbox() {
     try {
       if (tab === "inbox") {
         await axios
-          .patch(`/api/messages/thread/${msg.threadId}/read`)
+          .patch(
+            `${process.env.REACT_APP_API_URL}/api/messages/thread/${msg.threadId}/read`,
+          )
           .catch(() => {});
         setMessages((prev) =>
           prev.map((m) =>
@@ -71,7 +76,9 @@ export default function AdminInbox() {
           ),
         );
       }
-      const res = await axios.get(`/api/messages/thread/${msg.threadId}`);
+      const res = await axios.get(
+        `${process.env.REACT_APP_API_URL}/api/messages/thread/${msg.threadId}`,
+      );
       setThread(res.data);
     } catch {
       setThread([msg]);
@@ -97,7 +104,9 @@ export default function AdminInbox() {
       });
       toast.success("Reply sent!");
       setReplyBody("");
-      const res = await axios.get(`/api/messages/thread/${selected.threadId}`);
+      const res = await axios.get(
+        `${process.env.REACT_APP_API_URL}/api/messages/thread/${selected.threadId}`,
+      );
       setThread(res.data);
       loadList();
     } catch {

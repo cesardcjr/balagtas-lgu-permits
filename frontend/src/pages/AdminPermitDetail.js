@@ -77,7 +77,7 @@ export default function AdminPermitDetail() {
   const load = () => {
     setLoading(true);
     axios
-      .get(`/api/permits/${id}`)
+      .get(`${process.env.REACT_APP_API_URL}/api/permits/${id}`)
       .then((r) => {
         setPermit(r.data);
         setStatusForm((f) => ({ ...f, status: r.data.status }));
@@ -93,7 +93,10 @@ export default function AdminPermitDetail() {
     if (!statusForm.status || statusForm.status === permit.status) return;
     setUpdating(true);
     try {
-      await axios.patch(`/api/permits/${id}/status`, statusForm);
+      await axios.patch(
+        `${process.env.REACT_APP_API_URL}/api/permits/${id}/status`,
+        statusForm,
+      );
       toast.success("Status updated successfully");
       load();
     } catch {
